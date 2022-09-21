@@ -6,19 +6,31 @@ import { useState } from "react";
 import Header from "./components/Header";
 import StartGameScreen from "./screens/StartGameScreen";
 import GameScreen from "./screens/GameScreen";
+import GameOver from "./screens/GameOver";
 
 export default function App() {
   const [userNumber , setUserNumber] = useState()
+  const [guessRounds , setGuessRouonds] = useState(0)
 
+
+  const configureNewGameHandler = ()=>{
+    setGuessRouonds(0)
+    setUserNumber(null)
+  }
 
     const startGameHandler = (selectedNumber) =>{
       setUserNumber(selectedNumber)
     }
 
+    const gameOverHandler = rounds =>{
+      setGuessRouonds(rounds)
+    }
       let content = <StartGameScreen onStartGame={startGameHandler}/> 
 
-      if(userNumber){
-        content = <GameScreen userChoice={userNumber}/>
+      if(userNumber && guessRounds <= 0){
+        content = <GameScreen userChoice={userNumber} onGameOver={gameOverHandler}/>
+      }else if(guessRounds > 0){
+        content = <GameOver rounds={guessRounds} userNumber={userNumber} onRestart={configureNewGameHandler}/>
       }
 
 
