@@ -3,6 +3,7 @@ import React from "react";
 import BodyText from "../components/BodyText";
 import TitleText from "../components/TitleText";
 import Colors from "../constants/Colors";
+import StartButton from "./StartButton";
 const GameOver = (props) => {
   return (
     <View style={styles.screen}>
@@ -17,7 +18,9 @@ const GameOver = (props) => {
       </View>
       <BodyText style={styles.text}>Number of Rounds : <Text style={styles.rounds}>{props.rounds}</Text></BodyText>
       <BodyText style={styles.text}>The Number was : <Text style={styles.answer}>{props.userNumber}</Text></BodyText>
-      <Button title="New Game" onPress={props.onRestart} color={Colors.green}></Button>
+      <StartButton onStart={props.onRestart}>
+        New Game
+      </StartButton>
     </View>
   );
 };

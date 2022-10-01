@@ -1,9 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, ScrollView, FlatList } from "react-native";
+import {Ionicons} from '@expo/vector-icons'
+
 import Card from "../components/Card";
 import DefaultStyles from "../constants/DefaultStyles";
 import NumberContainer from "../components/NumberContainer";
-import Colors from "../constants/Colors";
+import StartButton from "./StartButton";
+import BodyText from "../components/BodyText";
+
+
+
 
 const generateRandom = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -15,11 +21,20 @@ const generateRandom = (min, max, exclude) => {
     return rndNumber;
   }
 };
+
+const renderListItem = (listLength , itemData)=>{
+  return (
+    <View style={styles.listItem}>
+      <BodyText>#{listLength - itemData.index}</BodyText>
+      <BodyText>{itemData.item}</BodyText>
+      </View>
+  )
+}
+
 const GameScreen = (props) => {
-  const [currentGuess, setCurrentGuess] = useState(
-    generateRandom(1, 100, props.userChoice)
-  );
-  const [rounds, setRounds] = useState(0);
+  const initialGuess = generateRandom(1, 100, props.userChoice);
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [pastGuesses, setpastGuesses] = useState([initialGuess.toString()]);
 
   const curretnLow = useRef(1);
   const currentHigh = useRef(100);
@@ -27,7 +42,7 @@ const GameScreen = (props) => {
   const { onGameOver, userChoice } = props;
   useEffect(() => {
     if (currentGuess === userChoice) {
-      onGameOver(rounds);
+      onGameOver(pastGuesses.length);
     }
   }, [currentGuess, userChoice, onGameOver]);
 
@@ -44,7 +59,7 @@ const GameScreen = (props) => {
     if (direction === "lower") {
       currentHigh.current = currentGuess;
     } else {
-      curretnLow.current = currentGuess;
+      curretnLow.current = currentGuess + 1;
     }
     const next = generateRandom(
       curretnLow.current,
@@ -52,7 +67,8 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(next);
-    setRounds((currentRounds) => currentRounds + 1);
+    // setRounds((currentRounds) => currentRounds + 1);
+    setpastGuesses(previousGuesses => [next.toString(),...previousGuesses ])
   };
 
   return (
@@ -60,21 +76,33 @@ const GameScreen = (props) => {
       <Text style={DefaultStyles.title}>Opponent's Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <Button
-          title="Lower"
-          color={Colors.primary}
-          onPress={() => {
+        <StartButton
+          onStart={() => {
             nextGuessHandler("lower");
           }}
-        />
-        <Button
-          title="Greater"
-          color={Colors.primary}
-          onPress={() => {
+        >
+          {/* <Ionicons name="md-remove" size={24} color="white"/> */}
+          Lower
+          </StartButton>
+        <StartButton
+          onStart={() => {
             nextGuessHandler("greater");
           }}
-        />
+        >
+          {/* <Ionicons name="md-add" size={24} color="white"/> */}
+          Greater
+        </StartButton>
       </Card>
+      <View style={styles.listCotainer}>
+      {/* <ScrollView contentContainerStyle={styles.list}>
+        {pastGuesses.map((guess , index)=> renderListItem(guess ,pastGuesses.length - index))}
+      </ScrollView> */}
+      <FlatList data={pastGuesses}
+      renderItem={renderListItem.bind(this , pastGuesses.length)}
+      keyExtractor={(item)=> item}
+      contentContainerStyle={styles.list}
+      />
+</View>
     </View>
   );
 };
@@ -92,6 +120,24 @@ const styles = StyleSheet.create({
     width: 300,
     maxWidth: "80%",
   },
+  listItem:{
+    borderColor : "#ccc",
+    borderWidth : 1,
+    padding : 15,
+    marginVertical : 10,
+    backgroundColor : "white",
+    flexDirection : "row",
+    justifyContent : "space-around",
+    width : "100%"
+  },
+  listCotainer : {
+    flex : 1,
+    width : "60%"
+  },
+  list : {
+    flexGrow : 1,
+    justifyContent : "flex-end",
+  }
 });
 
 export default GameScreen;

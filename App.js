@@ -13,7 +13,7 @@ export default function App() {
   const [guessRounds , setGuessRouonds] = useState(0)
 
 
-  const configureNewGameHandler = ()=>{
+  const configureNewGameHandler = () =>{
     setGuessRouonds(0)
     setUserNumber(null)
   }
