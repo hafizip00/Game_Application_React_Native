@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Image, View , Text } from "react-native";
+import { Button, StyleSheet, Image, View , Text ,Dimensions , ScrollView } from "react-native";
 import React from "react";
 import BodyText from "../components/BodyText";
 import TitleText from "../components/TitleText";
@@ -6,6 +6,7 @@ import Colors from "../constants/Colors";
 import StartButton from "./StartButton";
 const GameOver = (props) => {
   return (
+    <ScrollView>
     <View style={styles.screen}>
       <TitleText>GameOver..!</TitleText>
       <View style={styles.imageContainer}>
@@ -22,6 +23,7 @@ const GameOver = (props) => {
         New Game
       </StartButton>
     </View>
+    </ScrollView>
   );
 };
 
@@ -29,6 +31,7 @@ export default GameOver;
 
 const styles = StyleSheet.create({
   screen: {
+    marginTop : Dimensions.get("window").height > 600 ? 150 : 0,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -37,10 +40,10 @@ const styles = StyleSheet.create({
     marginTop : 20,
   },
   imageContainer : {
-    width : 300,
-    height : 300,
-    borderRadius : 150,
-    marginVertical : 20,
+    width : Dimensions.get("window").width * .7,
+    height : Dimensions.get("window").width * .7,
+    borderRadius : Dimensions.get("window").width * .7 / 2,
+    marginVertical : Dimensions.get("window").height / 30,
     justifyContent : "center",
     alignItems : "center",
     overflow : "hidden"
@@ -50,9 +53,9 @@ const styles = StyleSheet.create({
     height : "100%"
   },
   text : {
-    marginVertical : 20,
+    marginVertical : Dimensions.get("window").width /60,
     fontWeight : "bold",
-    fontSize : 20
+    fontSize : Dimensions.get("window").height < 400 ? 16 : 20
   },
   answer : {
     color : Colors.green
