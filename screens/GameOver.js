@@ -4,6 +4,7 @@ import BodyText from "../components/BodyText";
 import TitleText from "../components/TitleText";
 import Colors from "../constants/Colors";
 import StartButton from "./StartButton";
+import * as ScreenOrientation from 'expo-screen-orientation';
 const GameOver = (props) => {
   return (
     <ScrollView>
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginVertical : 10
   },
   bofyText : {
     marginTop : 20,

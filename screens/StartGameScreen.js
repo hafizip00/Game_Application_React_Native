@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
-  Dimensions
+  Dimensions,
+  ScrollView,
+  KeyboardAvoidingView
 } from "react-native";
 
 import Card from "../components/Card";
@@ -23,6 +25,7 @@ const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirm, setConfirm] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState("");
+  const [buttonWidth , setbuttonWidth] = useState(Dimensions.get("window").width / 4);
 
   const numberInput = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
@@ -59,7 +62,16 @@ const StartGameScreen = (props) => {
     );
   }
 
+  useEffect(()=>{
+    const updateWidth = ()=>{
+      setbuttonWidth(Dimensions.get("window").width / 4)
+    }
+    Dimensions.addEventListener("change" , updateWidth);
+  } , [])
+
   return (
+    <ScrollView>
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.screen}>
         <TitleText style={styles.text}>Start A New Game</TitleText>
@@ -76,14 +88,14 @@ const StartGameScreen = (props) => {
             value={enteredValue}
           />
           <View style={styles.buttonContainer}>
-            <View style={styles.button}>
+            <View style={{width : buttonWidth}}>
               <Button
                 title="Reset"
                 onPress={resetInputHandler}
                 color={Colors.accent}
               />
             </View>
-            <View style={styles.button}>
+            <View style={{width : buttonWidth}}>
               <Button
                 title="Confirm"
                 onPress={confirmInputHandler}
@@ -95,6 +107,8 @@ const StartGameScreen = (props) => {
         {confirmOutput}
       </View>
     </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -121,10 +135,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
   },
-  button: {
-    // width: 100,
-    width : Dimensions.get("window").width/4
-  },
+  // button: {
+  //   // width: 100,
+  //   width : Dimensions.get("window").width/4
+  // },
   input: {
     width: 50,
     textAlign: "center",

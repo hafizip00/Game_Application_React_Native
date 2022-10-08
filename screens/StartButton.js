@@ -1,21 +1,32 @@
-import { StyleSheet, Text, View , TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View , TouchableOpacity , TouchableNativeFeedback , Platform } from 'react-native'
 import React from 'react'
 import Colors from '../constants/Colors'
 
 
 const StartButton = (props) => {
+
+    let ButtonComponent = TouchableOpacity;
+    if(Platform.OS === "android" && Platform.Version >= 21){
+        ButtonComponent = TouchableNativeFeedback
+    }
   return (
-    <TouchableOpacity TouchableOpacity={.6} onPress={props.onStart}>
+    <View style={styles.buttonContainer}>
+    <ButtonComponent TouchableOpacity={.6} onPress={props.onStart}>
         <View style={styles.button}>
             <Text style={styles.buttonText}>{props.children}</Text>
         </View>
-    </TouchableOpacity>
+    </ButtonComponent>
+    </View>
   )
 }
 
 export default StartButton
 
 const styles = StyleSheet.create({
+    buttonContainer:{
+        borderRadius : 25,
+        overflow : 'hidden'
+    },
     button : {
         backgroundColor : Colors.primary,
         paddingVertical : 12,
