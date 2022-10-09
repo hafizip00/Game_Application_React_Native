@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Image, View , Text ,Dimensions , ScrollView } from "react-native";
+import { Button, StyleSheet, Image, View , Text ,Dimensions , ScrollView, } from "react-native";
 import React from "react";
 import BodyText from "../components/BodyText";
 import TitleText from "../components/TitleText";
